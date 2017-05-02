@@ -7,7 +7,7 @@
 //
 
 public protocol KWFillBlankDelegate {
-    func fillBlankView(fillBlankView:UIView, didSelectedBlankRange range:NSRange)->Void
+    func fillBlankView(_ fillBlankView:UIView, didSelectedBlankRange range:NSRange)->Void
 }
 
 import UIKit
@@ -17,7 +17,7 @@ class KWFillBlankViewController: UIViewController,UITextViewDelegate,UITextField
     var textView:KWFillBlankTextView!
     var inputBar:KWInputBar!
     var delegate:KWFillBlankDelegate!
-    private var selectedRange:NSRange!
+    fileprivate var selectedRange:NSRange!
     
     var showInputBar:Bool! = true{
         willSet{
@@ -25,18 +25,18 @@ class KWFillBlankViewController: UIViewController,UITextViewDelegate,UITextField
         }
     }
     
-    init(contentText:String, withTextViewFrame frame:CGRect=CGRectZero, blankTag:String="_"){
+    init(contentText:String, withTextViewFrame frame:CGRect=CGRect.zero, blankTag:String="_"){
         super.init(nibName: nil, bundle: nil)
         var textViewFrame:CGRect = frame
-        if frame == CGRectZero {
-            textViewFrame = CGRectMake(0, 0, self.view.frame.width, self.view.frame.height-44)
+        if frame == CGRect.zero {
+            textViewFrame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height-44)
         }
         self.textView = KWFillBlankTextView(contentText: contentText,frame: textViewFrame,blankTag: "_")
         self.view.addSubview(self.textView)
         self.textView.delegate = self
 
         
-        let inputFrame = CGRectMake(0, self.view.frame.height-44, self.view.frame.width, 44)
+        let inputFrame = CGRect(x: 0, y: self.view.frame.height-44, width: self.view.frame.width, height: 44)
         self.inputBar = KWInputBar(frame: inputFrame)
         self.showInputBar = true
         self.inputBar.inputField.delegate = self
@@ -46,12 +46,12 @@ class KWFillBlankViewController: UIViewController,UITextViewDelegate,UITextField
         self.listenToKeyboard()
         let tap = UITapGestureRecognizer(target: self, action: #selector(KWFillBlankViewController.keyBoardResign))
         let swipe = UISwipeGestureRecognizer(target: self, action: #selector(KWFillBlankViewController.keyBoardResign))
-        swipe.direction = .Down
+        swipe.direction = .down
         self.textView.addGestureRecognizer(tap)
         self.textView.addGestureRecognizer(swipe)
     }
     
-    private func showInputAction(){
+    fileprivate func showInputAction(){
         if showInputBar == true {
             self.view.addSubview(self.inputBar)
         }
@@ -71,7 +71,7 @@ class KWFillBlankViewController: UIViewController,UITextViewDelegate,UITextField
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
-    func textView(textView: UITextView, shouldInteractWithURL URL: NSURL, inRange characterRange: NSRange) -> Bool {
+    func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange) -> Bool {
         if URL.absoluteString == "blank" {
             self.inputBar.inputField.becomeFirstResponder()
             self.selectedRange = characterRange
@@ -91,17 +91,17 @@ class KWFillBlankViewController: UIViewController,UITextViewDelegate,UITextField
     }
     
     func listenToKeyboard(){
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(KWFillBlankViewController.changeInputBarPosition(_:)), name: UIKeyboardWillChangeFrameNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(KWFillBlankViewController.changeInputBarPosition(_:)), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
     }
-    func changeInputBarPosition(notif:NSNotification){
+    func changeInputBarPosition(_ notif:Notification){
         let userinfo = notif.userInfo
-        var start = userinfo![UIKeyboardFrameBeginUserInfoKey]?.description
-        var end = userinfo![UIKeyboardFrameEndUserInfoKey]?.description
+        var start = (userinfo![UIKeyboardFrameBeginUserInfoKey] as AnyObject).description
+        var end = (userinfo![UIKeyboardFrameEndUserInfoKey] as AnyObject).description
         if ((start?.hasPrefix("NSRect")) != nil) {
-            start = start?.stringByReplacingOccurrencesOfString("NSRect", withString: "CGRect")
+            start = start?.replacingOccurrences(of: "NSRect", with: "CGRect")
         }
         if ((end?.hasPrefix("NSRect")) != nil) {
-            end = end?.stringByReplacingOccurrencesOfString("NSRect", withString: "CGRect")
+            end = end?.replacingOccurrences(of: "NSRect", with: "CGRect")
         }
         let startRect = CGRectFromString(start!)
         let endRect = CGRectFromString(end!)
@@ -109,12 +109,12 @@ class KWFillBlankViewController: UIViewController,UITextViewDelegate,UITextField
         
         var frame = self.inputBar.frame
         frame.origin.y = frame.origin.y - changeY
-        UIView.animateWithDuration(0.25, animations: {
+        UIView.animate(withDuration: 0.25, animations: {
             self.inputBar.frame = frame
         })
     }
     
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.doneBlank()
         return true
     }

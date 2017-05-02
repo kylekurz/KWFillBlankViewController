@@ -20,11 +20,11 @@ class KWInputBar: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.backgroundColor = UIColor.whiteColor()
-        let textFrame = CGRectMake(10, 5, self.frame.width-20-65, self.frame.height-10)
+        self.backgroundColor = UIColor.white
+        let textFrame = CGRect(x:10, y:5, width:self.frame.width-20-65, height:self.frame.height-10)
         self.inputField = UITextField(frame: textFrame)
         self.addSubview(inputField)
-        let buttonFrame = CGRectMake(textFrame.width+textFrame.origin.x+5, textFrame.origin.y, 60, textFrame.height)
+        let buttonFrame = CGRect(x: textFrame.width+textFrame.origin.x+5, y: textFrame.origin.y, width: 60, height: textFrame.height)
         self.doneButton = UIButton(frame:buttonFrame)
         self.addSubview(doneButton)
         setInputProperty()
@@ -37,20 +37,20 @@ class KWInputBar: UIView {
     }
     
     func setInputProperty(){
-        self.inputField.borderStyle = .RoundedRect
-        self.inputField.autocapitalizationType = .None
-        self.inputField.keyboardType = .ASCIICapable
-        self.inputField.returnKeyType = .Next
-        self.inputField.spellCheckingType = .No
-        self.inputField.autocorrectionType = .No
+        self.inputField.borderStyle = .roundedRect
+        self.inputField.autocapitalizationType = .none
+        self.inputField.keyboardType = .asciiCapable
+        self.inputField.returnKeyType = .next
+        self.inputField.spellCheckingType = .no
+        self.inputField.autocorrectionType = .no
     }
     
     func setButtonProperty(){
         self.doneButton.backgroundColor = UIColor(red: 54.0/255.0, green: 105.0/255.0, blue: 195.0/255.0, alpha: 1)
         self.doneButton.layer.masksToBounds = true
         self.doneButton.layer.cornerRadius = 3
-        self.doneButton.setTitle("Next", forState: .Normal)
-        self.doneButton.addTarget(self, action: #selector(next), forControlEvents: .TouchUpInside)
+        self.doneButton.setTitle("Next", for: UIControlState())
+        self.doneButton.addTarget(self, action: #selector(getter: next), for: .touchUpInside)
     }
     
     func next(){
