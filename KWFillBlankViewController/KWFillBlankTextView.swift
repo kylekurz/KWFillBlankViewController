@@ -9,7 +9,7 @@
 
 import UIKit
 
-class KWFillBlankTextView: UITextView {
+public class KWFillBlankTextView: UITextView {
     /**
      The blank character in the text, the default value is "_".
      
@@ -38,7 +38,7 @@ class KWFillBlankTextView: UITextView {
 
      - returns: An initialized text view.
      */
-    init(contentText:String,frame:CGRect,blankTag:String="_"){
+    public init(contentText:String,frame:CGRect,blankTag:String="_"){
         super.init(frame:frame,textContainer:nil)
         self.text = contentText
         self.blankTag = blankTag
@@ -47,11 +47,11 @@ class KWFillBlankTextView: UITextView {
         setBlank()
     }
     
-    convenience init(contentText:String,frame:CGRect){
+    convenience public init(contentText:String,frame:CGRect){
         self.init(contentText:contentText,frame:frame,blankTag: "_")
     }
     
-    override func awakeFromNib() {
+    override public func awakeFromNib() {
         self.contentText = NSMutableAttributedString(string: self.text)
         setDefaultProperty()
         setBlank()
@@ -60,7 +60,7 @@ class KWFillBlankTextView: UITextView {
         }
     }
     
-    required init?(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
 

@@ -21,9 +21,8 @@ class ViewController: UIViewController,KWFillBlankDelegate,UITextViewDelegate {
     // - UITextViewDelegate
     // - For KWFillBlankTextView
     // - Using with storyboard
-    func textView(textView: UITextView, shouldInteractWithURL URL: NSURL, inRange characterRange: NSRange) -> Bool {
+    func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange) -> Bool {
         if URL.absoluteString == "blank"{
-            //type your code here
             print("Blank clicked")
             return false
         }
@@ -41,8 +40,9 @@ class ViewController: UIViewController,KWFillBlankDelegate,UITextViewDelegate {
     }
     
     // - KWFillBlankDelegate
-    func fillBlankView(fillBlankView: UIView, didSelectedBlankRange range: NSRange) {
+    func fillBlankView(_ fillBlankView: UIView, didSelectedBlankRange range: NSRange) {
         //type your code here
+        print ("HERE")
     }
 
 }
