@@ -21,10 +21,11 @@ public class KWFillBlankTextView: UITextView {
      */
     fileprivate var contentText:NSMutableAttributedString!
     
-    fileprivate var originFontSize:CGFloat = 22.0
+    fileprivate var originFontSize:CGFloat = 16.0
     
     fileprivate var blankDic = NSMutableDictionary()
     fileprivate var blankArr = NSMutableArray()
+    fileprivate var uniqueId:String!
     var selectedBlank:Int = 0
     
     /**
@@ -40,8 +41,17 @@ public class KWFillBlankTextView: UITextView {
      */
     public init(contentText:String,frame:CGRect,blankTag:String="_"){
         super.init(frame:frame,textContainer:nil)
+        initialize(contentText: contentText, blankTag: blankTag, uniqueId: "blank")
+    }
+
+    public func initialize(contentText:String,blankTag:String="_",uniqueId:String="blank"){
         self.text = contentText
         self.blankTag = blankTag
+        self.uniqueId = uniqueId
+        self.isSelectable = true
+        self.isEditable = false
+        self.delaysContentTouches = false
+        self.isScrollEnabled = false
         self.contentText = NSMutableAttributedString(string: self.text)
         setDefaultProperty()
         setBlank()
@@ -58,6 +68,10 @@ public class KWFillBlankTextView: UITextView {
         if !self.text.isEmpty {
             self.originFontSize = self.font!.pointSize
         }
+    }
+    
+    override init(frame: CGRect, textContainer: NSTextContainer?) {
+        super.init(frame: frame, textContainer: textContainer)
     }
     
     required public init?(coder aDecoder: NSCoder) {
@@ -77,7 +91,7 @@ public class KWFillBlankTextView: UITextView {
             let range = res.range
             self.blankArr.add(range)
             self.blankDic.setObject(self.blankArr.count-1, forKey: "\(range.location)" as NSCopying)
-            contentText.addAttribute(NSLinkAttributeName, value: "blank", range: range)
+            contentText.addAttribute(NSLinkAttributeName, value: uniqueId, range: range)
             contentText.addAttribute(NSForegroundColorAttributeName, value: UIColor.KWBlue, range: range)
         }
         contentText.addAttribute(NSFontAttributeName, value: UIFont.systemFont(ofSize: self.originFontSize), range: textRange)
@@ -88,7 +102,7 @@ public class KWFillBlankTextView: UITextView {
         self.selectedBlank = self.blankDic["\(range.location)"] as! Int
     }
     
-    func changeText(_ text:String ,inRange range:NSRange) {
+    public func changeText(_ text:String ,inRange range:NSRange) {
         updateRange(range)
         self.contentText.replaceCharacters(in: range, with: text)
         let newRange = NSMakeRange(range.location, text.length)
@@ -97,22 +111,12 @@ public class KWFillBlankTextView: UITextView {
         updateBlanks()
     }
     
-//    func clearTextinRange(range:NSRange){
-//        updateRange(range)
-//        self.contentText.removeAttribute(NSUnderlineStyleAttributeName, range: range)
-//        self.contentText.replaceCharactersInRange(range, withString: "_____")
-//        let newRange = NSMakeRange(range.location, 5)
-//        self.contentText.addAttribute(NSLinkAttributeName, value: "blank", range: newRange)
-//        self.attributedText = self.contentText
-//        updateBlanks()
-//    }
-    
     func updateBlanks(){
         self.blankDic.removeAllObjects()
         self.blankArr.removeAllObjects()
         self.contentText.enumerateAttribute(NSLinkAttributeName, in: NSMakeRange(0, self.contentText.length), options: .longestEffectiveRangeNotRequired, using: {
             value, range, stop in
-            if value != nil && value as! String == "blank"{
+            if value != nil && value as! String == uniqueId {
                 self.blankArr.add(range)
                 self.blankDic.setObject(self.blankArr.count-1, forKey: "\(range.location)" as NSCopying)
             }
@@ -129,7 +133,7 @@ public class KWFillBlankTextView: UITextView {
         var arr:[String] = []
         self.contentText.enumerateAttribute(NSLinkAttributeName, in: NSMakeRange(0, self.contentText.length), options: .longestEffectiveRangeNotRequired, using: {
             value, range, stop in
-            if value != nil && value as! String == "blank"{
+            if value != nil && value as! String == uniqueId {
                 var str = self.contentText.attributedSubstring(from: range).string
                 if str.hasPrefix(self.blankTag){
                     str = ""
