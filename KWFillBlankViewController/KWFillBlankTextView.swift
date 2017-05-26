@@ -21,8 +21,6 @@ public class KWFillBlankTextView: UITextView {
      */
     fileprivate var contentText:NSMutableAttributedString!
     
-    fileprivate var originFontSize:CGFloat = 16.0
-    
     fileprivate var blankDic = NSMutableDictionary()
     fileprivate var blankArr = NSMutableArray()
     fileprivate var uniqueId:String!
@@ -65,9 +63,6 @@ public class KWFillBlankTextView: UITextView {
         self.contentText = NSMutableAttributedString(string: self.text)
         setDefaultProperty()
         setBlank()
-        if !self.text.isEmpty {
-            self.originFontSize = self.font!.pointSize
-        }
     }
     
     override init(frame: CGRect, textContainer: NSTextContainer?) {
@@ -94,7 +89,7 @@ public class KWFillBlankTextView: UITextView {
             contentText.addAttribute(NSLinkAttributeName, value: uniqueId, range: range)
             contentText.addAttribute(NSForegroundColorAttributeName, value: UIColor.KWBlue, range: range)
         }
-        contentText.addAttribute(NSFontAttributeName, value: UIFont.systemFont(ofSize: self.originFontSize), range: textRange)
+        contentText.addAttribute(NSFontAttributeName, value: UIFont.preferredFont(forTextStyle: .body), range: textRange)
         self.attributedText = contentText
     }
     
@@ -103,10 +98,13 @@ public class KWFillBlankTextView: UITextView {
     }
     
     public func changeText(_ text:String ,inRange range:NSRange) {
+        self.contentText.removeAttribute(NSUnderlineStyleAttributeName, range: range)
         updateRange(range)
         self.contentText.replaceCharacters(in: range, with: text)
         let newRange = NSMakeRange(range.location, text.length)
-        self.contentText.addAttribute(NSUnderlineStyleAttributeName, value: 1, range: newRange)
+        if text != blankTag {
+            self.contentText.addAttribute(NSUnderlineStyleAttributeName, value: 1, range: newRange)
+        }
         self.attributedText = self.contentText
         updateBlanks()
     }
