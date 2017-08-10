@@ -128,7 +128,7 @@ class KWFillBlankViewController: UIViewController,UITextViewDelegate,UITextField
             return
         }
         if text?.length != 0 {
-            self.textView.changeText(self.inputBar.inputField.text!, inRange: self.selectedRange)
+            let _ = self.textView.changeText(self.inputBar.inputField.text!, inRange: self.selectedRange)
         }
         else{
             self.textView.updateRange(self.selectedRange)

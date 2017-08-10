@@ -97,7 +97,19 @@ public class KWFillBlankTextView: UITextView {
         self.selectedBlank = self.blankDic["\(range.location)"] as! Int
     }
     
-    public func changeText(_ text:String ,inRange range:NSRange) {
+    public func nextBlank(after range:NSRange) -> NSRange? {
+        print("FINDING range \(range.location):\(range.length)")
+        for i in 0...self.blankArr.count-1 {
+            let r1 = self.blankArr[i] as! NSRange
+            print("FOUND \(r1.location):\(r1.length)")
+            if let r = self.blankArr[i] as? NSRange, NSEqualRanges(r, range), i < self.blankArr.count-1 {
+                return self.blankArr[i+1] as? NSRange
+            }
+        }
+        return nil
+    }
+    
+    public func changeText(_ text:String ,inRange range:NSRange) -> NSRange {
         self.contentText.removeAttribute(NSUnderlineStyleAttributeName, range: range)
         updateRange(range)
         self.contentText.replaceCharacters(in: range, with: text)
@@ -107,6 +119,7 @@ public class KWFillBlankTextView: UITextView {
         }
         self.attributedText = self.contentText
         updateBlanks()
+        return newRange
     }
     
     func updateBlanks(){
