@@ -98,10 +98,7 @@ public class KWFillBlankTextView: UITextView {
     }
     
     public func nextBlank(after range:NSRange) -> NSRange? {
-        print("FINDING range \(range.location):\(range.length)")
         for i in 0...self.blankArr.count-1 {
-            let r1 = self.blankArr[i] as! NSRange
-            print("FOUND \(r1.location):\(r1.length)")
             if let r = self.blankArr[i] as? NSRange, NSEqualRanges(r, range), i < self.blankArr.count-1 {
                 return self.blankArr[i+1] as? NSRange
             }
