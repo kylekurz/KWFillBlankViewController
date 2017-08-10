@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "KWFillBlankViewController"
-  s.version          = "1.0.0"
+  s.version          = "1.0.1"
   s.summary          = "A view controller can fill blank in the text view written by Swift"
   s.description      = <<-DESC
                        It is a  view controller can fill blank in the text view ,written by Swift
@@ -8,6 +8,7 @@ Pod::Spec.new do |s|
   s.homepage         = "https://github.com/oooneFolder/KWFillBlankViewController"
   s.license          = 'MIT'
   s.author           = { "oneFolder" => "ooonefolder@gmail.com" }
+  s.author           = { "Kyle Kurz" => "kyle@kylekurz.com" } 
   s.source           = { :git => "https://github.com/oooneFolder/KWFillBlankViewController.git", :tag => s.version.to_s }
 
   s.platform     = :ios, '10.0'
