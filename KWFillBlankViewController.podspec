@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "KWFillBlankViewController"
-  s.version          = "1.0.1"
+  s.version          = "1.0.2"
   s.summary          = "A view controller can fill blank in the text view written by Swift"
   s.description      = <<-DESC
                        It is a  view controller can fill blank in the text view ,written by Swift
