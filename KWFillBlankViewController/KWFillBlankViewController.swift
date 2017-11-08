@@ -86,14 +86,14 @@ class KWFillBlankViewController: UIViewController,UITextViewDelegate,UITextField
         return true
     }
     
-    func keyBoardResign(){
+    @objc func keyBoardResign(){
         self.inputBar.inputField.resignFirstResponder()
     }
     
     func listenToKeyboard(){
         NotificationCenter.default.addObserver(self, selector: #selector(KWFillBlankViewController.changeInputBarPosition(_:)), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
     }
-    func changeInputBarPosition(_ notif:Notification){
+    @objc func changeInputBarPosition(_ notif:Notification){
         let userinfo = notif.userInfo
         var start = (userinfo![UIKeyboardFrameBeginUserInfoKey] as AnyObject).description
         var end = (userinfo![UIKeyboardFrameEndUserInfoKey] as AnyObject).description
