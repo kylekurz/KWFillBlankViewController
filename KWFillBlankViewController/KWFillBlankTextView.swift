@@ -86,10 +86,10 @@ public class KWFillBlankTextView: UITextView {
             let range = res.range
             self.blankArr.add(range)
             self.blankDic.setObject(self.blankArr.count-1, forKey: "\(range.location)" as NSCopying)
-            contentText.addAttribute(NSLinkAttributeName, value: uniqueId, range: range)
-            contentText.addAttribute(NSForegroundColorAttributeName, value: UIColor.KWBlue, range: range)
+            contentText.addAttribute(NSAttributedStringKey.link, value: uniqueId, range: range)
+            contentText.addAttribute(NSAttributedStringKey.foregroundColor, value: UIColor.KWBlue, range: range)
         }
-        contentText.addAttribute(NSFontAttributeName, value: UIFont.preferredFont(forTextStyle: .body), range: textRange)
+        contentText.addAttribute(NSAttributedStringKey.font, value: UIFont.preferredFont(forTextStyle: .body), range: textRange)
         self.attributedText = contentText
     }
     
@@ -107,12 +107,12 @@ public class KWFillBlankTextView: UITextView {
     }
     
     public func changeText(_ text:String ,inRange range:NSRange) -> NSRange {
-        self.contentText.removeAttribute(NSUnderlineStyleAttributeName, range: range)
+        self.contentText.removeAttribute(NSAttributedStringKey.underlineStyle, range: range)
         updateRange(range)
         self.contentText.replaceCharacters(in: range, with: text)
         let newRange = NSMakeRange(range.location, text.length)
         if text != blankTag {
-            self.contentText.addAttribute(NSUnderlineStyleAttributeName, value: 1, range: newRange)
+            self.contentText.addAttribute(NSAttributedStringKey.underlineStyle, value: 1, range: newRange)
         }
         self.attributedText = self.contentText
         updateBlanks()
@@ -122,7 +122,7 @@ public class KWFillBlankTextView: UITextView {
     func updateBlanks(){
         self.blankDic.removeAllObjects()
         self.blankArr.removeAllObjects()
-        self.contentText.enumerateAttribute(NSLinkAttributeName, in: NSMakeRange(0, self.contentText.length), options: .longestEffectiveRangeNotRequired, using: {
+        self.contentText.enumerateAttribute(NSAttributedStringKey.link, in: NSMakeRange(0, self.contentText.length), options: .longestEffectiveRangeNotRequired, using: {
             value, range, stop in
             if value != nil && value as! String == uniqueId {
                 self.blankArr.add(range)
@@ -132,14 +132,14 @@ public class KWFillBlankTextView: UITextView {
     }
     
     func highlightTextInRange(_ range:NSRange){
-        self.contentText.removeAttribute(NSBackgroundColorAttributeName, range: NSMakeRange(0, self.contentText.length))
-        self.contentText.addAttribute(NSBackgroundColorAttributeName, value: UIColor.groupTableViewBackground, range: range)
+        self.contentText.removeAttribute(NSAttributedStringKey.backgroundColor, range: NSMakeRange(0, self.contentText.length))
+        self.contentText.addAttribute(NSAttributedStringKey.backgroundColor, value: UIColor.groupTableViewBackground, range: range)
         self.attributedText = self.contentText
     }
     
     func contentTexts() -> [String]{
         var arr:[String] = []
-        self.contentText.enumerateAttribute(NSLinkAttributeName, in: NSMakeRange(0, self.contentText.length), options: .longestEffectiveRangeNotRequired, using: {
+        self.contentText.enumerateAttribute(NSAttributedStringKey.link, in: NSMakeRange(0, self.contentText.length), options: .longestEffectiveRangeNotRequired, using: {
             value, range, stop in
             if value != nil && value as! String == uniqueId {
                 var str = self.contentText.attributedSubstring(from: range).string
