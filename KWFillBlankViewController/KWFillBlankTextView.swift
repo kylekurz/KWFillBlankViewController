@@ -124,7 +124,7 @@ public class KWFillBlankTextView: UITextView {
         self.blankArr.removeAllObjects()
         self.contentText.enumerateAttribute(NSAttributedStringKey.link, in: NSMakeRange(0, self.contentText.length), options: .longestEffectiveRangeNotRequired, using: {
             value, range, stop in
-            if value != nil && value as! String == uniqueId {
+            if value != nil && value as? String == uniqueId {
                 self.blankArr.add(range)
                 self.blankDic.setObject(self.blankArr.count-1, forKey: "\(range.location)" as NSCopying)
             }
@@ -141,7 +141,7 @@ public class KWFillBlankTextView: UITextView {
         var arr:[String] = []
         self.contentText.enumerateAttribute(NSAttributedStringKey.link, in: NSMakeRange(0, self.contentText.length), options: .longestEffectiveRangeNotRequired, using: {
             value, range, stop in
-            if value != nil && value as! String == uniqueId {
+            if value != nil && value as? String == uniqueId {
                 var str = self.contentText.attributedSubstring(from: range).string
                 if str.hasPrefix(self.blankTag){
                     str = ""
