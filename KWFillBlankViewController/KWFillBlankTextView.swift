@@ -90,6 +90,9 @@ public class KWFillBlankTextView: UITextView {
             contentText.addAttribute(NSAttributedStringKey.foregroundColor, value: UIColor.KWBlue, range: range)
         }
         contentText.addAttribute(NSAttributedStringKey.font, value: UIFont.preferredFont(forTextStyle: .body), range: textRange)
+        if #available(iOS 13.0, *) {
+            contentText.addAttribute(NSAttributedStringKey.foregroundColor, value: UIColor.label, range: textRange)
+        }
         self.attributedText = contentText
     }
     
